@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"sync"
 	"time"
+	"math/rand"
 )
 
 const BASE_TOPIC string = "/mqtt-bench/benchmark"
@@ -95,10 +96,11 @@ func PublishAllClient(clients []*MQTT.Client, opts ExecOptions, param ...string)
 		wg.Add(1)
 
 		client := clients[id]
-
+		r := rand.New(rand.NewSource(time.Now().UnixNano()))
+		time.Sleep(time.Duration(r) * time.Millisecond)
 		go func(clientId int) {
 			defer wg.Done()
-
+			
 			for index := 0; index < opts.Count; index++ {
 				topic := fmt.Sprintf(opts.Topic+"/%d", clientId)
 
